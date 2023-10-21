@@ -14,8 +14,8 @@ type ItemListDTO struct {
 	Status           string  `json:"status"`            // статус
 	ElementsCount    int     `json:"n"`                 // количество элементов
 	Delta            float64 `json:"d"`                 // дельта между элементами полседовательности
-	StartElement     float64 `json:"n1"`                //Стартовое значение
-	TimeInterval     float64 `json:"I"`                 //интервал в секундах
+	StartElement     float64 `json:"n1"`                // Стартовое значение
+	TimeInterval     float64 `json:"I"`                 // интервал в секундах
 	TTL              float64 `json:"TTL"`               // время хранени результата в секуднах
 	CurrentIteration int     `json:"current_iteration"` // текущая итерация
 	ReceiptTime      int64   `json:"receipt_time"`      // время поставки(unix)
@@ -24,5 +24,4 @@ type ItemListDTO struct {
 
 	// 400й код, с телом - бизнесовые ошибки!!! все остальное - сеть
 	Err error `json:"error"` // ошибка
-
 }

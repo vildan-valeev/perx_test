@@ -3,6 +3,7 @@ package api
 import (
 	"context"
 	"errors"
+	"log"
 	"net/http"
 
 	"perx/internal/config"
@@ -66,12 +67,17 @@ func (r *Router) Methods(methods ...string) *Router {
 func (r *Router) Handler(path string, handler http.Handler) {
 	tmpRoute.handler = handler
 	tmpRoute.path = path
+
 	r.Handle()
 }
 
 // Handle handles a route.
 func (r *Router) Handle() {
-	r.tree.Insert(tmpRoute.methods, tmpRoute.path, tmpRoute.handler)
+	err := r.tree.Insert(tmpRoute.methods, tmpRoute.path, tmpRoute.handler)
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	tmpRoute = &route{}
 }
 
@@ -85,10 +91,15 @@ func (r *Router) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	if err != nil {
 		status, msg := handleErr(err)
 		w.WriteHeader(status)
-		w.Write(msg)
+
+		_, e := w.Write(msg)
+		if e != nil {
+			return
+		}
 
 		return
 	}
+
 	h := result.actions.handler
 	h.ServeHTTP(w, req)
 }
@@ -97,11 +108,11 @@ func handleErr(err error) (int, []byte) {
 	var status int
 	var body []byte
 
-	switch err {
-	case ErrMethodNotAllowed:
+	switch {
+	case errors.Is(err, ErrMethodNotAllowed):
 		status = http.StatusMethodNotAllowed
 		body = Http405Response
-	case ErrNotFound:
+	case errors.Is(err, ErrNotFound):
 		status = http.StatusNotFound
 		body = Http404Response
 	}

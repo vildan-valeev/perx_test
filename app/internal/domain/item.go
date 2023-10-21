@@ -1,6 +1,9 @@
 package domain
 
-import "time"
+import (
+	"perx/internal/transport/dto"
+	"time"
+)
 
 type Item struct {
 	ID            int     `json:"id"`             // ID элемента
@@ -8,8 +11,8 @@ type Item struct {
 	Status        Status  `json:"status"`         // статус
 	ElementsCount int     `json:"n"`              // количество элементов
 	Delta         float64 `json:"d"`              // дельта между элементами полседовательности
-	StartElement  float64 `json:"n1"`             //Стартовое значение
-	TimeInterval  float64 `json:"I"`              //интервал в секундах
+	StartElement  float64 `json:"n1"`             // Стартовое значение
+	TimeInterval  float64 `json:"I"`              // интервал в секундах
 	TTL           float64 `json:"TTL"`            // время хранени результата в секуднах
 
 	// TODO возможно в отдельную структуру...
@@ -23,7 +26,7 @@ type Item struct {
 
 type Items []*Item
 
-// Status задачи
+// Status задачи.
 type Status int
 
 const (
@@ -51,12 +54,25 @@ func (s Status) String() string {
 	}
 }
 
-// TODO возможно раздельно..
-type task struct {
-	id          int
-	idItem      int
-	receiptTime time.Time
-	startTime   time.Time
-	endTime     time.Time
-	err         error
+// ToDTO TODO перенесте в dto, сделать передачу аргументом а не методом.
+func (i Items) ToDTO() []dto.ItemListDTO {
+	var result []dto.ItemListDTO
+	for _, item := range i {
+		result = append(result, dto.ItemListDTO{
+			ID:               item.ID,
+			QueuePosition:    item.QueuePosition,
+			Status:           item.Status.String(),
+			ElementsCount:    item.ElementsCount,
+			Delta:            item.Delta,
+			StartElement:     item.StartElement,
+			TimeInterval:     item.TimeInterval,
+			TTL:              item.TTL,
+			CurrentIteration: item.CurrentIteration,
+			ReceiptTime:      item.ReceiptTime.UnixMilli(),
+			StartTime:        item.StartTime.UnixMilli(),
+			EndTime:          item.EndTime.UnixMilli(),
+		})
+	}
+
+	return result
 }

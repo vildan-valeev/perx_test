@@ -32,7 +32,7 @@ func (c ItemService) AddItemToQueueService(ctx context.Context, addItem *dto.Ite
 		TimeInterval:  addItem.I,
 		TTL:           addItem.TTL,
 	}
-	t := i.EndTime.Unix()
+
 	// todo: validation Item
 
 	if err := c.repo.AddTaskRepo(ctx, &i); err != nil {
@@ -55,7 +55,6 @@ func (c ItemService) ListItemService(ctx context.Context) (domain.Items, error) 
 			ID: 2,
 		},
 	}
-	//c.repo.ListItemRepo(ctx)
 
 	return resp, nil
 }

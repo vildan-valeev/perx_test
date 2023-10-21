@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+
 	"perx/internal/service"
 	"perx/internal/transport/dto"
 )
@@ -27,8 +28,6 @@ func ItemToQueueHandler(ctx context.Context, sc service.Item) http.Handler {
 
 		w.Header().Set("Content-Type", "application/json")
 
-		//json.NewEncoder(w).Encode(answer)
 		fmt.Fprintf(w, "Done!")
 	})
-
 }

@@ -1,8 +1,9 @@
 package domain_test
 
 import (
-	"perx/internal/domain"
 	"testing"
+
+	"perx/internal/domain"
 )
 
 func TestStatusSting(t *testing.T) {
@@ -76,7 +77,6 @@ func TestStatusSting(t *testing.T) {
 			if tt.want != tt.args.item.String() {
 				t.Fail()
 			}
-
 		})
 	}
 }

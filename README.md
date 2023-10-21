@@ -87,4 +87,4 @@ make test_race
 ### TODO
 1. обработка ошибок
 2. возможно следует переименовать в "а1" поле n1 (startElement)
-3. 
+3. заменить в импортах "perx" на "github.com/..../perx_test"

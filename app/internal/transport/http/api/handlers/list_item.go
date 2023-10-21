@@ -4,12 +4,12 @@ import (
 	"context"
 	"encoding/json"
 	"net/http"
+
 	"perx/internal/service"
 )
 
 func ListItemHandler(ctx context.Context, sc service.Item) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-
 		items, err := sc.ListItemService(ctx)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
@@ -17,6 +17,10 @@ func ListItemHandler(ctx context.Context, sc service.Item) http.Handler {
 		}
 
 		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(items)
+		err = json.NewEncoder(w).Encode(items.ToDTO())
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
 	})
 }

@@ -78,7 +78,6 @@ func NewMain(n *uint) *Main {
 // Run executes the program. The configuration should already be set up before
 // calling this function.
 func (m *Main) Run(ctx context.Context) (err error) {
-
 	repositories := repository.NewRepositories()
 	services := service.NewServices(service.Deps{
 		Repos: repositories,
