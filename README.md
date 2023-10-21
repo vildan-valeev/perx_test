@@ -68,7 +68,10 @@ Test
 ```shell
 make test
 ```
-
+Data race detector:
+```shell
+make test_race
+```
 ---
 ## Architecture
 
@@ -82,4 +85,6 @@ make test
 
 ---
 ### TODO
-1. //
+1. обработка ошибок
+2. возможно следует переименовать в "а1" поле n1 (startElement)
+3. 

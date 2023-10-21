@@ -23,6 +23,6 @@ func NewRepositories() *Repositories {
 
 // Item - методы для работы с БД.
 type Item interface {
-	InsertItemRepo(ctx context.Context, i *domain.Item) error
+	AddTaskRepo(ctx context.Context, i *domain.Item) error
 	ListItemRepo(ctx context.Context) ([]*domain.Item, error)
 }

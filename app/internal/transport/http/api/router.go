@@ -1,6 +1,7 @@
 package api
 
 import (
+	"context"
 	"errors"
 	"net/http"
 
@@ -9,10 +10,10 @@ import (
 	"perx/internal/transport/http/api/handlers"
 )
 
-func NewAPI(cfg config.Config, is service.Item) *Router {
+func NewAPI(ctx context.Context, cfg config.Config, s service.Item) *Router {
 	r := NewRouter()
-	r.Methods(http.MethodPost).Handler(`/item_to_queue`, handlers.ItemToQueueHandler())
-	r.Methods(http.MethodGet).Handler(`/list`, handlers.ListItemHandler())
+	r.Methods(http.MethodPost).Handler(`/item_to_queue`, handlers.ItemToQueueHandler(ctx, s))
+	r.Methods(http.MethodGet).Handler(`/list`, handlers.ListItemHandler(ctx, s))
 
 	return r
 }

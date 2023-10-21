@@ -12,7 +12,7 @@ func NewItemRepository() *ItemRepository {
 	return &ItemRepository{}
 }
 
-func (s *ItemRepository) InsertItemRepo(ctx context.Context, item *domain.Item) error {
+func (s *ItemRepository) AddTaskRepo(ctx context.Context, item *domain.Item) error {
 	return nil
 }
 

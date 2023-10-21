@@ -84,7 +84,7 @@ func (m *Main) Run(ctx context.Context) (err error) {
 		Repos: repositories,
 	})
 
-	m.Srv = server.New(*m.Config, services)
+	m.Srv = server.New(ctx, *m.Config, services)
 
 	// Start the server.
 	return m.Srv.Open()

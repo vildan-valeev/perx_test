@@ -20,3 +20,7 @@ lint:
 .PHONY: test
 test:
 	cd app && go test ./...
+
+.PHONY: test_race
+test_race:
+	cd app && go test -race -short ./...

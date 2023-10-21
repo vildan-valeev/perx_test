@@ -13,8 +13,8 @@ import (
 */
 
 type Item interface {
-	CreateItemService(ctx context.Context, item *dto.ItemDTO) error
-	ListItemService(ctx context.Context) ([]*domain.Item, error)
+	AddItemToQueueService(ctx context.Context, item *dto.ItemToQueueDTO) error
+	ListItemService(ctx context.Context) (domain.Items, error)
 }
 
 type Services struct {

@@ -2,6 +2,8 @@ package service
 
 import (
 	"context"
+	"log"
+	"math/rand"
 
 	"perx/internal/domain"
 	"perx/internal/repository"
@@ -19,20 +21,41 @@ func NewItemService(repo repository.Item) *ItemService {
 	}
 }
 
-// CreateItemService Создание.
-func (c ItemService) CreateItemService(ctx context.Context, itemDTO *dto.ItemDTO) error {
-	item := domain.Item{
-		ID: 0,
+// AddItemToQueueService Добавление задачи в очеред.
+func (c ItemService) AddItemToQueueService(ctx context.Context, addItem *dto.ItemToQueueDTO) error {
+	log.Println("Add to queue", addItem)
+	i := domain.Item{
+		ID:            rand.Int(),
+		ElementsCount: addItem.N,
+		Delta:         addItem.D,
+		StartElement:  addItem.N1,
+		TimeInterval:  addItem.I,
+		TTL:           addItem.TTL,
 	}
+	t := i.EndTime.Unix()
+	// todo: validation Item
 
-	if err := c.repo.InsertItemRepo(ctx, &item); err != nil {
+	if err := c.repo.AddTaskRepo(ctx, &i); err != nil {
 		return err
 	}
 
 	return nil
 }
 
-// ListItemService GetAll Получение списка.
-func (c ItemService) ListItemService(ctx context.Context) ([]*domain.Item, error) {
-	return c.repo.ListItemRepo(ctx)
+// ListItemService Получение списка.
+func (c ItemService) ListItemService(ctx context.Context) (domain.Items, error) {
+	resp := domain.Items{
+		{
+			ID: 0,
+		},
+		{
+			ID: 1,
+		},
+		{
+			ID: 2,
+		},
+	}
+	//c.repo.ListItemRepo(ctx)
+
+	return resp, nil
 }

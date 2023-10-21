@@ -18,13 +18,13 @@ type Server struct {
 }
 
 // New returns a new instance of Server.
-func New(cfg config.Config, services *service.Services) *Server {
+func New(ctx context.Context, cfg config.Config, services *service.Services) *Server {
 	s := &Server{
 		config: cfg,
 	}
 
 	// version 1
-	r := api.NewAPI(cfg, services.Item)
+	r := api.NewAPI(ctx, cfg, services.Item)
 
 	s.http = &http.Server{
 		Addr:    ":8000",
