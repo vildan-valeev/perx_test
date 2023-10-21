@@ -1,0 +1,146 @@
+stages:
+  - test
+  - build_front
+  - build_prod
+  - build_story
+#  - sign
+
+default:
+  tags:
+    - tn-697
+
+golangci-lint:
+  stage: test
+  image:
+    name: golangci/golangci-lint:v1.51
+    entrypoint: [ "" ]
+  variables:
+    CGO_ENABLED: "0"
+    GO111MODULE: "on"
+  before_script:
+    - cd backend
+    - go mod download
+    - go mod verify
+    - go install github.com/golang/mock/mockgen@latest
+    - go generate ./...
+  script: |
+    go version
+    golangci-lint run --config $(pwd)/build/.golangci.yml ./...
+
+go tests:
+  stage: test
+  image:
+    name: docker-public.registry.tages.ru/golang:1.19
+  before_script:
+    - cd backend
+    - go mod download
+    - go mod verify
+    - go install github.com/golang/mock/mockgen@latest
+    - go generate ./...
+  script: |
+    go version
+    go test ./...
+
+build front:
+  stage: build_front
+  image: docker-public.registry.tages.ru/node:14
+  script: |
+    cd frontend
+    npm ci
+    npm run build
+  artifacts:
+    paths:
+      - frontend/dist/
+  only:
+    - master
+    - /^story/.*$/
+
+.deploy_app:
+  image: docker-public.registry.tages.ru/golang:1.19
+  variables:
+    CGO_ENABLED: "0"
+    GO111MODULE: "on"
+    GOOS: "windows"
+    GOARCH: "amd64"
+  script: |
+    #Установка зависимостей
+    apt-get update && apt upgrade -y && apt-get install --no-install-recommends -y  \
+    osslsigncode  \
+    openssl  \
+    libcurl4-openssl-dev  \
+    libssl-dev  \
+    curl  \
+    libcurl4  \
+    git  \
+    automake  \
+    libtool  \
+    pkg-config  \
+    wget  \
+    libccid  \
+    libpcsclite1  \
+    pcscd  \
+    usbutils  \
+    opensc
+
+    #Берем файлы фронта для компиляции в одинь бинарь
+    cp -r frontend/dist/. backend/static/dist/
+
+    cd backend
+    #Генерим сертификаты для https как сервера(бекенда)
+    openssl req  -new -subj "/C=RU/ST=RU/O=TN/OU=TN/CN=localhost" -newkey rsa:2048 -nodes -keyout ./static/cert/localhost.key -out ./static/cert/localhost.csr
+    openssl  x509 -req -days 365  -in ./static/cert/localhost.csr -signkey ./static/cert/localhost.key -out ./static/cert/localhost.crt
+    
+    #Генерим сертификаты для https как сервера(бекенда)
+    openssl req -x509 -nodes -days 365 -subj "/C=RU/ST=RU/O=TN/OU=TN/CN=localhost" -newkey rsa:2048 -sha256 -keyout private.key -out selfsigned.crt
+
+    #Генерим exe
+    $BUILD_METHOD
+
+    #Подписываем exe
+    osslsigncode sign -certs ./selfsigned.crt -key ./private.key -n "TEST TN" -i https://tn.ru/ -t http://timestamp.digicert.com -in ./build/windows/app.exe -out ./build/windows/app-signed.exe
+
+    #Подкладываем конфиг файл
+    cp $CI_PROJECT_DIR/config.ini build/windows/
+
+  artifacts:
+    paths:
+      - backend/build/windows/
+  dependencies:
+    - build front
+
+build_prod:
+  stage: build_prod
+  variables:
+    BUILD_METHOD: "go build -o build/windows/app.exe main.go"
+  extends: .deploy_app
+  only:
+    - master
+
+build_story:
+  stage: build_story
+  variables:
+    BUILD_METHOD: "go build -tags dev -o build/windows/app.exe main.go"
+  extends: .deploy_app
+  only:
+    - /^story/.*$/
+
+build mock:
+  stage: build_story
+  image: docker-public.registry.tages.ru/golang:1.19
+  variables:
+    CGO_ENABLED: "0"
+    GO111MODULE: "on"
+    GOOS: "windows"
+    GOARCH: "amd64"
+  script: |
+    cd backend
+    
+    # Генерим exe
+    go build -o build/windows/mockserver.exe test/transit/mockserver.go
+
+  artifacts:
+    paths:
+      - backend/build/windows/
+
+  only:
+    - /^story/.*$/

@@ -1,0 +1,63 @@
+###
+GET http://localhost:8000/api/v1/categories
+Content-Type: application/json
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 201, "Response status is not 201");
+});
+%}
+
+###
+GET http://localhost:8000/api/v1/categories/707f69e0-edac-4c3e-bb7f-918d3f190e19
+Content-Type: application/json
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+});
+%}
+
+###
+POST http://localhost:8000/api/v1/categories
+Content-Type: application/json
+
+{}
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+});
+%}
+
+###
+GET http://localhost:8000/api/v1/items
+Content-Type: application/json
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+});
+%}
+
+###
+GET http://localhost:8000/api/v1/items/d217243b-41cc-45fd-abcc-a77d8e3ebc9c
+Content-Type: application/json
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+});
+%}
+
+###
+POST http://localhost:8000/api/v1/items
+Content-Type: application/json
+
+{}
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+});
+%}

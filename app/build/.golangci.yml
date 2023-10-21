@@ -1,0 +1,106 @@
+run:
+  concurrency: 4
+  deadline: 5m
+  issues-exit-code: 1
+  go: '1.21'
+  skip-dirs:
+    - tests
+
+
+output:
+  format: colored-line-number
+  print-issued-lines: true
+  print-linter-name: true
+  path-prefix: "app"
+
+linters-settings:
+  goimports:
+    local-prefixes: perx
+  gocyclo:
+    min-complexity: 30
+  gocognit:
+    min-complexity: 40
+  godot:
+    # comments to be checked: `declarations`, `toplevel`, or `all`
+    scope: declarations
+    # check that each sentence starts with a capital letter
+    capital: false
+  predeclared:
+    # comma-separated list of predeclared identifiers to not report on
+    ignore: ""
+    # include method names and field names (i.e., qualified names) in checks
+    q: false
+  gofumpt:
+    lang-version: "1.19"
+  nilnil:
+    # By default, nilnil checks all returned types below.
+    checked-types:
+      - ptr
+      - func
+      - iface
+      - map
+      - chan
+
+linters:
+  enable:
+    - govet
+    - errcheck
+    - ineffassign
+    - typecheck
+    - megacheck
+    - bodyclose
+    - stylecheck
+    - gosec
+    - unconvert
+    - goconst
+    - gocyclo
+    - gocognit
+    - asciicheck
+    - gofmt
+    - goimports
+    - misspell
+    - unparam
+    - dogsled
+    - nakedret
+    - prealloc
+    - gocritic
+    - gochecknoinits
+    - gochecknoglobals
+    - whitespace
+    - wsl
+    - goprintffuncname
+    - godot
+    - testpackage
+    - nolintlint
+    - noctx
+    - exportloopref
+    - gofumpt
+    - errorlint
+    - tparallel
+    - predeclared
+    - forcetypeassert
+    - nilerr
+    - bidichk
+    - nilnil
+  fast: false
+  disable-all: true
+
+issues:
+  exclude-rules:
+    - path: _test\.go
+      linters:
+        - gocyclo
+        - errcheck
+        - dupl
+        - gosec
+        - gochecknoglobals
+        - wsl
+        - funlen
+        - goerr113
+        - gofumpt
+    - text: "Errors unhandled"
+      linters:
+        - gosec
+    - linters:
+        - lll
+      source: "^//go:generate "
