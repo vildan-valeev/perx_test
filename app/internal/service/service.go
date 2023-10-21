@@ -3,9 +3,9 @@ package service
 import (
 	"context"
 
-	"perx/internal/domain"
-	"perx/internal/repository"
-	"perx/internal/transport/dto"
+	"github.com/vildan-valeev/perx_test/internal/domain"
+	"github.com/vildan-valeev/perx_test/internal/repository"
+	"github.com/vildan-valeev/perx_test/internal/transport/dto"
 )
 
 /*

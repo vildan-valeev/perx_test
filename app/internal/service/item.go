@@ -2,12 +2,13 @@ package service
 
 import (
 	"context"
+	"crypto/rand"
 	"log"
-	"math/rand"
+	"math/big"
 
-	"perx/internal/domain"
-	"perx/internal/repository"
-	"perx/internal/transport/dto"
+	"github.com/vildan-valeev/perx_test/internal/domain"
+	"github.com/vildan-valeev/perx_test/internal/repository"
+	"github.com/vildan-valeev/perx_test/internal/transport/dto"
 )
 
 // ItemService UseCase - бизнес логика.
@@ -24,8 +25,14 @@ func NewItemService(repo repository.Item) *ItemService {
 // AddItemToQueueService Добавление задачи в очеред.
 func (c ItemService) AddItemToQueueService(ctx context.Context, addItem *dto.ItemToQueueDTO) error {
 	log.Println("Add to queue", addItem)
+
+	n, err := rand.Int(rand.Reader, big.NewInt(27))
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	i := domain.Item{
-		ID:            rand.Int(),
+		ID:            n.Int64(),
 		ElementsCount: addItem.N,
 		Delta:         addItem.D,
 		StartElement:  addItem.N1,

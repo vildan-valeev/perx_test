@@ -2,8 +2,9 @@ package repository
 
 import (
 	"context"
+	"time"
 
-	"perx/internal/domain"
+	"github.com/vildan-valeev/perx_test/internal/domain"
 )
 
 type ItemRepository struct{}
@@ -13,6 +14,7 @@ func NewItemRepository() *ItemRepository {
 }
 
 func (s *ItemRepository) AddTaskRepo(ctx context.Context, item *domain.Item) error {
+	item.ReceiptTime = time.Now()
 	return nil
 }
 

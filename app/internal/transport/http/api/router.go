@@ -6,9 +6,9 @@ import (
 	"log"
 	"net/http"
 
-	"perx/internal/config"
-	"perx/internal/service"
-	"perx/internal/transport/http/api/handlers"
+	"github.com/vildan-valeev/perx_test/internal/config"
+	"github.com/vildan-valeev/perx_test/internal/service"
+	"github.com/vildan-valeev/perx_test/internal/transport/http/api/handlers"
 )
 
 func NewAPI(ctx context.Context, cfg config.Config, s service.Item) *Router {

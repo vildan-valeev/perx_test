@@ -1,9 +1,11 @@
 package domain_test
 
 import (
+	"reflect"
 	"testing"
 
-	"perx/internal/domain"
+	"github.com/vildan-valeev/perx_test/internal/domain"
+	"github.com/vildan-valeev/perx_test/internal/transport/dto"
 )
 
 func TestStatusSting(t *testing.T) {
@@ -75,6 +77,48 @@ func TestStatusSting(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			if tt.want != tt.args.item.String() {
+				t.Fail()
+			}
+		})
+	}
+}
+
+func TestToDTO(t *testing.T) {
+	type args struct {
+		items domain.Items
+	}
+	tests := []struct {
+		name string
+		args args
+		want dto.ItemsDTO
+	}{
+		{
+			name: "test 1 - empty",
+			args: args{
+				items: domain.Items{},
+			},
+			want: dto.ItemsDTO{},
+		},
+		{
+			name: "test 2 - default fields",
+			args: args{
+				items: domain.Items{
+					{},
+				},
+			},
+			want: dto.ItemsDTO{
+				{
+					Status:      domain.StatusUnknown.String(),
+					ReceiptTime: -62135596800000,
+					StartTime:   -62135596800000,
+					EndTime:     -62135596800000,
+				},
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if !reflect.DeepEqual(tt.want, tt.args.items.ToDTO()) {
 				t.Fail()
 			}
 		})

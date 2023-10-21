@@ -8,8 +8,8 @@ type ItemToQueueDTO struct {
 	TTL float64 `json:"TTL"` // время хранени результата в секуднах
 }
 
-type ItemListDTO struct {
-	ID               int     `json:"id"`                // ID элемента
+type ItemDTO struct {
+	ID               int64   `json:"id"`                // ID элемента
 	QueuePosition    int     `json:"queue_position"`    // номер в очереди
 	Status           string  `json:"status"`            // статус
 	ElementsCount    int     `json:"n"`                 // количество элементов
@@ -23,5 +23,7 @@ type ItemListDTO struct {
 	EndTime          int64   `json:"end_time"`          // время окончания (unix)
 
 	// 400й код, с телом - бизнесовые ошибки!!! все остальное - сеть
-	Err error `json:"error"` // ошибка
+	Err string `json:"error"` // ошибка
 }
+
+type ItemsDTO []ItemDTO

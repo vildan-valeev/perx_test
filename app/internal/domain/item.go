@@ -1,27 +1,27 @@
 package domain
 
 import (
-	"perx/internal/transport/dto"
 	"time"
+
+	"github.com/vildan-valeev/perx_test/internal/transport/dto"
 )
 
 type Item struct {
-	ID            int     `json:"id"`             // ID элемента
-	QueuePosition int     `json:"queue_position"` // номер в очереди
-	Status        Status  `json:"status"`         // статус
-	ElementsCount int     `json:"n"`              // количество элементов
-	Delta         float64 `json:"d"`              // дельта между элементами полседовательности
-	StartElement  float64 `json:"n1"`             // Стартовое значение
-	TimeInterval  float64 `json:"I"`              // интервал в секундах
-	TTL           float64 `json:"TTL"`            // время хранени результата в секуднах
+	ID            int64   // ID элемента
+	QueuePosition int     // номер в очереди
+	Status        Status  // статус
+	ElementsCount int     // количество элементов
+	Delta         float64 // дельта между элементами полседовательности
+	StartElement  float64 // Стартовое значение
+	TimeInterval  float64 // интервал в секундах
+	TTL           float64 // время хранени результата в секуднах
 
 	// TODO возможно в отдельную структуру...
-	CurrentIteration int       `json:"current_iteration"` // текущая итерация
-	ReceiptTime      time.Time `json:"receipt_time"`      // время поставки
-	StartTime        time.Time `json:"start_time"`        // время запуска
-	EndTime          time.Time `json:"end_time"`          // время окончания
+	CurrentIteration int       // текущая итерация
+	ReceiptTime      time.Time // время поставки
+	StartTime        time.Time // время запуска
+	EndTime          time.Time // время окончания
 	err              error     // ошибка
-
 }
 
 type Items []*Item
@@ -55,10 +55,11 @@ func (s Status) String() string {
 }
 
 // ToDTO TODO перенесте в dto, сделать передачу аргументом а не методом.
-func (i Items) ToDTO() []dto.ItemListDTO {
-	var result []dto.ItemListDTO
+func (i Items) ToDTO() dto.ItemsDTO {
+	result := dto.ItemsDTO{}
+
 	for _, item := range i {
-		result = append(result, dto.ItemListDTO{
+		result = append(result, dto.ItemDTO{
 			ID:               item.ID,
 			QueuePosition:    item.QueuePosition,
 			Status:           item.Status.String(),
@@ -71,6 +72,7 @@ func (i Items) ToDTO() []dto.ItemListDTO {
 			ReceiptTime:      item.ReceiptTime.UnixMilli(),
 			StartTime:        item.StartTime.UnixMilli(),
 			EndTime:          item.EndTime.UnixMilli(),
+			Err:              item.err.Error(),
 		})
 	}
 

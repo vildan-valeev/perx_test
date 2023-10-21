@@ -8,10 +8,10 @@ import (
 	"os/signal"
 	"syscall"
 
-	"perx/internal/config"
-	"perx/internal/repository"
-	"perx/internal/service"
-	"perx/internal/transport/server"
+	"github.com/vildan-valeev/perx_test/internal/config"
+	"github.com/vildan-valeev/perx_test/internal/repository"
+	"github.com/vildan-valeev/perx_test/internal/service"
+	"github.com/vildan-valeev/perx_test/internal/transport/server"
 )
 
 func main() {

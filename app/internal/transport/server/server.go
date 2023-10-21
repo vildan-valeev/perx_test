@@ -7,9 +7,9 @@ import (
 	"net"
 	"net/http"
 
-	"perx/internal/config"
-	"perx/internal/service"
-	"perx/internal/transport/http/api"
+	"github.com/vildan-valeev/perx_test/internal/config"
+	"github.com/vildan-valeev/perx_test/internal/service"
+	"github.com/vildan-valeev/perx_test/internal/transport/http/api"
 )
 
 type Server struct {

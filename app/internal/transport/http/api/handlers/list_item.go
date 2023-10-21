@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"perx/internal/service"
+	"github.com/vildan-valeev/perx_test/internal/service"
 )
 
 func ListItemHandler(ctx context.Context, sc service.Item) http.Handler {

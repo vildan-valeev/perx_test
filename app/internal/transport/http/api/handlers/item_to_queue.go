@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"net/http"
 
-	"perx/internal/service"
-	"perx/internal/transport/dto"
+	"github.com/vildan-valeev/perx_test/internal/service"
+	"github.com/vildan-valeev/perx_test/internal/transport/dto"
 )
 
 func ItemToQueueHandler(ctx context.Context, sc service.Item) http.Handler {

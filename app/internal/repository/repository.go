@@ -3,7 +3,7 @@ package repository
 import (
 	"context"
 
-	"perx/internal/domain"
+	"github.com/vildan-valeev/perx_test/internal/domain"
 )
 
 /*
