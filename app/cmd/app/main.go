@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"flag"
+	"github.com/vildan-valeev/perx_test/pkg/pool"
 	"log"
 	"os"
 	"os/signal"
@@ -15,7 +16,7 @@ import (
 )
 
 func main() {
-	workersCount := flag.Uint("n", 4, "workers count")
+	workersCount := flag.Int("n", 4, "workers count")
 	flag.Parse()
 
 	log.Printf("Start App with %d workers\n", *workersCount)
@@ -33,7 +34,7 @@ func main() {
 	}()
 
 	// Instantiate a new type to represent our application.
-	m := NewMain(workersCount)
+	m := NewMain(*workersCount)
 
 	// Execute program.
 	if err := m.Run(ctx); err != nil {
@@ -58,34 +59,43 @@ func main() {
 
 // Main represents the program.
 type Main struct {
-	// Config parsed config data.
-	Config *config.Config
-	// HTTP server for handling communication.
-	Srv *server.Server
+	Config *config.Config // Config parsed config data.
+	Srv    *server.Server // HTTP server for handling communication.
+	wp     *pool.Pool     // Worker Pool
 }
 
 // NewMain returns a new instance of Main.
-func NewMain(n *uint) *Main {
+func NewMain(n int) *Main {
 	log.Println("Init config")
 
 	cfg := config.New(n)
 
 	return &Main{
 		Config: cfg,
+		wp:     pool.NewPool(cfg.Workers),
 	}
 }
 
 // Run executes the program. The configuration should already be set up before
 // calling this function.
 func (m *Main) Run(ctx context.Context) (err error) {
-	repositories := repository.NewRepositories()
+	// init storage
+	storage := repository.GetLocalStorage()
+	if err = storage.Run(); err != nil {
+		return err
+	}
+
+	// start worker pool
+	go m.wp.Run()
+
+	repositories := repository.NewRepositories(m.wp, storage)
 	services := service.NewServices(service.Deps{
 		Repos: repositories,
 	})
 
 	m.Srv = server.New(ctx, *m.Config, services)
 
-	// Start the server.
+	// Start the server and workers.
 	return m.Srv.Open()
 }
 
