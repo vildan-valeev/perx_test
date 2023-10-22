@@ -24,7 +24,7 @@ type Item struct {
 	err              error     // ошибка
 }
 
-type Items []*Item
+type Items map[int64]*Item
 
 // Status задачи.
 type Status int

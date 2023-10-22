@@ -2,7 +2,6 @@ package repository
 
 import (
 	"context"
-
 	"github.com/vildan-valeev/perx_test/internal/domain"
 )
 
@@ -23,6 +22,12 @@ func NewRepositories() *Repositories {
 
 // Item - методы для работы с БД.
 type Item interface {
-	AddTaskRepo(ctx context.Context, i *domain.Item) error
-	ListItemRepo(ctx context.Context) ([]*domain.Item, error)
+	SetItem(ctx context.Context, item *domain.Item) error
+	GetResultCan() chan<- domain.Item
+	UpdateCurrentIteration(id int64, currentIteration int) error
+	GetItem(ctx context.Context, id int64) (*domain.Item, error)
+	GetItems(ctx context.Context) (*domain.Items, error)
+	//Cleaning()
+	//Run()
+
 }
