@@ -27,7 +27,7 @@ func New(ctx context.Context, cfg config.Config, services *service.Services) *Se
 	r := api.NewAPI(ctx, cfg, services.Item)
 
 	s.http = &http.Server{
-		Addr:    ":8000",
+		Addr:    net.JoinHostPort(s.config.IP, s.config.HTTPPort),
 		Handler: r,
 	}
 
@@ -37,8 +37,7 @@ func New(ctx context.Context, cfg config.Config, services *service.Services) *Se
 // Open validates the server options and begins listening on the bind address.
 func (s *Server) Open() error {
 	go func() {
-		address := net.JoinHostPort(s.config.IP, s.config.HTTPPort)
-		log.Printf("Start HTTP on %s\n", address)
+		log.Printf("Start HTTP on %s:%s\n", s.config.IP, s.config.HTTPPort)
 
 		if err := s.http.ListenAndServe(); err != nil {
 			log.Fatal("failed to http serve")

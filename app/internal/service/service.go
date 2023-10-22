@@ -14,7 +14,7 @@ import (
 
 type Item interface {
 	AddItemToQueueService(ctx context.Context, item *dto.ItemToQueueDTO) error
-	ListItemService(ctx context.Context) (domain.Items, error)
+	ListItemService(ctx context.Context) (*domain.Items, error)
 }
 
 type Services struct {
