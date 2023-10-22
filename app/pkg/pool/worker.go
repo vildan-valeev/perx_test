@@ -4,23 +4,23 @@ import (
 	"fmt"
 )
 
-// Worker handles all the work
+// Worker handles all the work.
 type Worker struct {
 	ID       int
 	taskChan chan *Task
 	quit     chan bool
 }
 
-// NewWorker returns new instance of worker
-func NewWorker(channel chan *Task, ID int) *Worker {
+// NewWorker returns new instance of worker.
+func NewWorker(channel chan *Task, id int) *Worker {
 	return &Worker{
-		ID:       ID,
+		ID:       id,
 		taskChan: channel,
 		quit:     make(chan bool),
 	}
 }
 
-// Start starts the worker
+// Start starts the worker.
 func (wr *Worker) Start() {
 	fmt.Printf("Starting worker %d\n", wr.ID)
 
@@ -37,6 +37,7 @@ func (wr *Worker) Start() {
 // Stop quits the worker
 func (wr *Worker) Stop() {
 	fmt.Printf("Closing worker %d\n", wr.ID)
+
 	go func() {
 		wr.quit <- true
 	}()

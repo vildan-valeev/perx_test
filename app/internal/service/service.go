@@ -2,11 +2,11 @@ package service
 
 import (
 	"context"
-	"github.com/vildan-valeev/perx_test/pkg/pool"
 
 	"github.com/vildan-valeev/perx_test/internal/domain"
 	"github.com/vildan-valeev/perx_test/internal/repository"
 	"github.com/vildan-valeev/perx_test/internal/transport/dto"
+	"github.com/vildan-valeev/perx_test/pkg/pool"
 )
 
 /*

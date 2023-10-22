@@ -3,7 +3,6 @@ package service
 import (
 	"context"
 	"crypto/rand"
-	"github.com/vildan-valeev/perx_test/pkg/pool"
 	"log"
 	"math/big"
 	"time"
@@ -11,6 +10,7 @@ import (
 	"github.com/vildan-valeev/perx_test/internal/domain"
 	"github.com/vildan-valeev/perx_test/internal/repository"
 	"github.com/vildan-valeev/perx_test/internal/transport/dto"
+	"github.com/vildan-valeev/perx_test/pkg/pool"
 )
 
 // ItemService UseCase - бизнес логика.
@@ -79,6 +79,7 @@ func (s ItemService) progression(arguments interface{}) error {
 	I := args.Item.TimeInterval
 
 	log.Printf("ID=%d, start=%f, delta=%f, n=%d I=%f\n", id, a1, d, n, I)
+
 	for i := 1; i < n+1; i++ {
 		res := a1 + (d * (float64(i) - 1))
 		log.Printf("ID=%d, curIter=%d, res=%f \n", id, i, res)

@@ -2,14 +2,14 @@ package repository
 
 import (
 	"context"
-	"github.com/vildan-valeev/perx_test/internal/domain"
 	"log"
 	"sync"
+
+	"github.com/vildan-valeev/perx_test/internal/domain"
 )
 
 type itemRepository struct {
-	items    domain.Items // токен от Транзита
-	apiKey   string       // Ключ от Payment
+	items    domain.Items // задачи
 	resultCh chan<- domain.Item
 	sync.RWMutex
 }
@@ -34,6 +34,7 @@ func (r *itemRepository) UpdateCurrentIteration(id int64, currentIteration int) 
 	log.Println("Обновление текущей итерации  item!")
 
 	r.items[id].CurrentIteration = currentIteration
+
 	return nil
 }
 
@@ -52,6 +53,7 @@ func (r *itemRepository) SetItem(ctx context.Context, item *domain.Item) error {
 	log.Printf("Добавляем item %d в хранилище! \n", item.ID)
 
 	r.items[item.ID] = item
+
 	return nil
 }
 

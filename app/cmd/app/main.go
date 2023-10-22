@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"flag"
-	"github.com/vildan-valeev/perx_test/pkg/pool"
 	"log"
 	"os"
 	"os/signal"
@@ -13,6 +12,7 @@ import (
 	"github.com/vildan-valeev/perx_test/internal/repository"
 	"github.com/vildan-valeev/perx_test/internal/service"
 	"github.com/vildan-valeev/perx_test/internal/transport/server"
+	"github.com/vildan-valeev/perx_test/pkg/pool"
 )
 
 func main() {
@@ -79,12 +79,6 @@ func NewMain(n int) *Main {
 // Run executes the program. The configuration should already be set up before
 // calling this function.
 func (m *Main) Run(ctx context.Context) (err error) {
-	// init storage
-	//storage := repository.GetLocalStorage()
-	//if err = storage.Run(); err != nil {
-	//	return err
-	//}
-
 	// start worker pool
 	go m.wp.Run()
 

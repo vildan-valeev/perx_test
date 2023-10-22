@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+
 	"github.com/vildan-valeev/perx_test/internal/domain"
 )
 
@@ -27,7 +28,4 @@ type Item interface {
 	UpdateCurrentIteration(id int64, currentIteration int) error
 	GetItem(ctx context.Context, id int64) (*domain.Item, error)
 	GetItems(ctx context.Context) (*domain.Items, error)
-	//Cleaning()
-	//Run()
-
 }

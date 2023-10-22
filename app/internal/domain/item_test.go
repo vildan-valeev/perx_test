@@ -103,7 +103,7 @@ func TestToDTO(t *testing.T) {
 			name: "test 2 - default fields",
 			args: args{
 				items: domain.Items{
-					{},
+					0: {},
 				},
 			},
 			want: dto.ItemsDTO{

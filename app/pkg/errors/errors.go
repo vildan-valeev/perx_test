@@ -23,7 +23,7 @@ type Error struct {
 
 // Error implements the error interface.
 func (e *Error) Error() string {
-	return fmt.Sprintf("error: code=%s message=%s", e.Code, e.Message)
+	return fmt.Sprintf("error: code=%d message=%s", e.Code, e.Message)
 }
 
 // ErrorCode unwraps an application error and returns its code.

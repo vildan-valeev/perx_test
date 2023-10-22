@@ -2,17 +2,15 @@ package pool
 
 import (
 	"log"
-	"sync"
 )
 
-// Pool is the worker pool
+// Pool is the worker pool.
 type Pool struct {
 	Workers []*Worker
 
 	concurrency   int
 	collector     chan *Task
 	runBackground chan bool
-	wg            sync.WaitGroup
 }
 
 // NewPool initializes a new pool with the given tasks and
@@ -28,7 +26,7 @@ func NewPool(concurrency int) *Pool {
 	}
 }
 
-// AddTask adds a task to the pool
+// AddTask adds a task to the pool.
 func (p *Pool) AddTask(task *Task) {
 	p.collector <- task
 }
@@ -37,9 +35,12 @@ func (p *Pool) AddTask(task *Task) {
 // finished.
 func (p *Pool) Run() {
 	log.Printf("Starting Worker Pool with N=%d workers", p.concurrency)
+
 	for i := 1; i <= p.concurrency; i++ {
 		worker := NewWorker(p.collector, i)
+
 		p.Workers = append(p.Workers, worker)
+
 		go worker.Start()
 	}
 
@@ -47,9 +48,10 @@ func (p *Pool) Run() {
 	<-p.runBackground
 }
 
-// Stop stops background workers
+// Stop stops background workers.
 func (p *Pool) Stop() {
 	log.Println("Stopping Worker Pool")
+
 	for i := range p.Workers {
 		p.Workers[i].Stop()
 	}

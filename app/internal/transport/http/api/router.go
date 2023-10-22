@@ -45,11 +45,9 @@ type route struct {
 }
 
 var (
-	tmpRoute = &route{}
-	// Error for not found.
-	ErrNotFound = errors.New("no matching route was found")
-	// Error for method not allowed.
-	ErrMethodNotAllowed = errors.New("methods is not allowed")
+	tmpRoute            = &route{}
+	ErrNotFound         = errors.New("no matching route was found") // Error for not found.
+	ErrMethodNotAllowed = errors.New("methods is not allowed")      // Error for method not allowed.
 )
 
 func NewRouter() *Router {
