@@ -80,17 +80,18 @@ func NewMain(n int) *Main {
 // calling this function.
 func (m *Main) Run(ctx context.Context) (err error) {
 	// init storage
-	storage := repository.GetLocalStorage()
-	if err = storage.Run(); err != nil {
-		return err
-	}
+	//storage := repository.GetLocalStorage()
+	//if err = storage.Run(); err != nil {
+	//	return err
+	//}
 
 	// start worker pool
 	go m.wp.Run()
 
-	repositories := repository.NewRepositories(m.wp, storage)
+	repositories := repository.NewRepositories()
 	services := service.NewServices(service.Deps{
 		Repos: repositories,
+		Wp:    m.wp,
 	})
 
 	m.Srv = server.New(ctx, *m.Config, services)
@@ -101,6 +102,8 @@ func (m *Main) Run(ctx context.Context) (err error) {
 
 // Close gracefully stops the program.
 func (m *Main) Close(ctx context.Context) (err error) { //nolint
+	m.wp.Stop()
+
 	if m.Srv != nil {
 		_ = m.Srv.Close(ctx)
 	}

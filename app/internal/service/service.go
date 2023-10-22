@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"github.com/vildan-valeev/perx_test/pkg/pool"
 
 	"github.com/vildan-valeev/perx_test/internal/domain"
 	"github.com/vildan-valeev/perx_test/internal/repository"
@@ -23,11 +24,12 @@ type Services struct {
 
 type Deps struct {
 	Repos *repository.Repositories
+	Wp    *pool.Pool
 	Host  string
 }
 
 func NewServices(deps Deps) *Services {
-	itemService := NewItemService(deps.Repos.Item)
+	itemService := NewItemService(deps.Repos.Item, deps.Wp)
 
 	return &Services{
 		Item: itemService,

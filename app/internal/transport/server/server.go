@@ -40,7 +40,7 @@ func (s *Server) Open() error {
 		log.Printf("Start HTTP on %s:%s\n", s.config.IP, s.config.HTTPPort)
 
 		if err := s.http.ListenAndServe(); err != nil {
-			log.Fatal("failed to http serve")
+			log.Println("failed to http serve (or closing)")
 		}
 	}()
 

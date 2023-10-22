@@ -6,7 +6,7 @@ import (
 )
 
 /*
-Работа с БД
+Работа с БД(памятью)
 */
 
 type Repositories struct {

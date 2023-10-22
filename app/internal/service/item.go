@@ -19,9 +19,10 @@ type ItemService struct {
 	repo repository.Item
 }
 
-func NewItemService(repo repository.Item) *ItemService {
+func NewItemService(repo repository.Item, wp *pool.Pool) *ItemService {
 	return &ItemService{
 		repo: repo,
+		wp:   wp,
 	}
 }
 
@@ -48,10 +49,8 @@ func (s ItemService) AddItemToQueueService(ctx context.Context, addItem *dto.Ite
 
 	// отправляем на обработку в очередь worker pool
 	task := pool.NewTask(s.progression, &ArgsProgression{Item: i, Out: s.repo.GetResultCan()})
-
-	// TODO: add errors
-	s.wp.AddTask(task)
-
+	s.wp.AddTask(task) // TODO: add errors
+	// сохраняем в память(оправляем в хранилище/бд)
 	if err = s.repo.SetItem(ctx, &i); err != nil {
 		return err
 	}
@@ -64,7 +63,7 @@ func (s ItemService) ListItemService(ctx context.Context) (*domain.Items, error)
 	return s.repo.GetItems(ctx)
 }
 
-// Аргументы для проброса в таск и вызова функции progression из таски в воркер пуле
+// ArgsProgression Аргументы для проброса в таск и вызова функции progression из таски в воркер пуле.
 type ArgsProgression struct {
 	Item domain.Item // отдаем копию в обработку(по ссылке только в/из хранилища)
 	Out  chan<- domain.Item
