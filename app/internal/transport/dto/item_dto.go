@@ -21,9 +21,6 @@ type ItemDTO struct {
 	ReceiptTime      int64   `json:"receipt_time"`      // Время поставки(unix)
 	StartTime        int64   `json:"start_time"`        // Время запуска (unix)
 	EndTime          int64   `json:"end_time"`          // Время окончания (unix)
-
-	// 400й код, с телом - бизнесовые ошибки!!! все остальное - сеть
-	Err string `json:"error"` // ошибка
 }
 
 type ItemsDTO []ItemDTO

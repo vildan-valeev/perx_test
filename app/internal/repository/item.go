@@ -7,9 +7,7 @@ import (
 	"github.com/vildan-valeev/perx_test/internal/domain"
 )
 
-type ItemRepository struct {
-	storage *LocalStorage
-}
+type ItemRepository struct{}
 
 func NewItemRepository() *ItemRepository {
 	return &ItemRepository{}
@@ -39,20 +37,24 @@ func (r *ItemRepository) GetItems(ctx context.Context) (*domain.Items, error) {
 
 // SetStatus Обновляем поле статус.
 func (r *ItemRepository) SetStatus(id int64, status domain.Status) error {
-	return nil
+	s := GetLocalStorage()
+	return s.SetStatus(id, status)
 }
 
 // SetStartTime Обновляем поле время начала обработки таски.
-func (r *ItemRepository) SetStartTime(id int64, time time.Time) error {
-	return nil
+func (r *ItemRepository) SetStartTime(id int64, t time.Time) error {
+	s := GetLocalStorage()
+	return s.SetStartTime(id, t)
 }
 
 // SetEndTime Обновляем поле время окончания обработки таски.
 func (r *ItemRepository) SetEndTime(id int64, endTime time.Time) error {
-	return nil
+	s := GetLocalStorage()
+	return s.SetEndTime(id, endTime)
 }
 
 // DeleteItem Удаление записи из мапы.
 func (r *ItemRepository) DeleteItem(id int64) error {
-	return nil
+	s := GetLocalStorage()
+	return s.DeleteItem(id)
 }

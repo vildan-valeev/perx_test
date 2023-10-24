@@ -1,31 +1,11 @@
 version: '3.8'
 
 services:
-#  db:
-#    image: postgres:alpine
-#    container_name: rest_db
-#    volumes:
-#      - ./postgres_data:/var/lib/postgresql/data/
-#    environment:
-#      - POSTGRES_NAME=postgres
-#      - POSTGRES_USER=postgres
-#      - POSTGRES_PASSWORD=postgres
-#    ports:
-#      - "5432:5432"
-#    healthcheck:
-#      test: [ "CMD-SHELL", "pg_isready -U postgres -d postgres" ]
-#      interval: 10s
-#      timeout: 5s
-#      retries: 5
-
   go:
-    container_name: go
+    container_name: perx
     env_file:
       - dev.env
     build:
       context: .
-#    depends_on:
-#      db:
-#        condition: service_healthy # waiting until heathcheck of postgres is good
     ports:
       - "8000:8000"

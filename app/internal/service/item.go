@@ -82,7 +82,7 @@ func (s ItemService) progression(arguments interface{}) error {
 
 	// TODO: РЕЗУЛЬТАТЫ ЧЕРЕЗ КАНАЛ ПРОТАСКИВАЕМ ИЛИ ТАК ДЕРГАЕМ МЕТОДЫ ?????
 
-	log.Printf("ID=%d, start=%f, delta=%f, n=%d I=%f\n", id, a1, d, n, I)
+	log.Printf("Start iteration ID=%d, start=%f, delta=%f, n=%d I=%f\n", id, a1, d, n, I)
 
 	if err := s.repo.SetStatus(id, domain.StatusProcessed); err != nil {
 		return err
@@ -94,7 +94,7 @@ func (s ItemService) progression(arguments interface{}) error {
 
 	for i := 1; i < n+1; i++ {
 		res := a1 + (d * (float64(i) - 1))
-		log.Printf("ID=%d, curIter=%d, res=%f \n", id, i, res)
+		log.Printf("Iteration... ID=%d, curIter=%d, res=%f \n", id, i, res)
 		// обновить текущее значение итерации Item в хранилище
 		if err := s.repo.UpdateCurrentIteration(id, i); err != nil {
 			return err

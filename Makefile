@@ -5,13 +5,13 @@ help:
 
 .PHONY: up
 up:
-	cd app && docker-compose up --build
+	docker compose up --build
 
 
 .PHONY: up_local
 up_local:
-	go build -o /build/main ./cmd/app/main.go
-	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o /build/main ./cmd/app/main.go
+	cd app && CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o ./build/main ./cmd/app/main.go
+	cd app && ./build/main
 
 .PHONY: lint
 lint:

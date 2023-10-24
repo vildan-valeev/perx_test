@@ -88,16 +88,20 @@ func (l *localStorage) GetItems() (*domain.Items, error) {
 func (l *localStorage) SetStatus(id int64, status domain.Status) error {
 	l.Lock()
 	defer l.Unlock()
-	log.Println("Обновляем поле Status")
+	log.Printf("Обновляем поле Status для ID=%d \n", id)
+
+	l.items[id].Status = status
 
 	return nil
 }
 
 // SetStartTime Обновляем поле время начала обработки таски.
-func (l *localStorage) SetStartTime(id int64, time time.Time) error {
+func (l *localStorage) SetStartTime(id int64, t time.Time) error {
 	l.Lock()
 	defer l.Unlock()
-	log.Println("Обновляем поле StartTime")
+	log.Printf("Обновляем поле StartTime для ID=%d \n", id)
+
+	l.items[id].StartTime = t
 
 	return nil
 }
@@ -106,7 +110,7 @@ func (l *localStorage) SetStartTime(id int64, time time.Time) error {
 func (l *localStorage) SetEndTime(id int64, endTime time.Time) error {
 	l.Lock()
 	defer l.Unlock()
-	log.Println("Обновляем поле EndTime")
+	log.Printf("Обновляем поле EndTime для ID=%d \n", id)
 
 	l.items[id].EndTime = endTime
 
@@ -117,7 +121,7 @@ func (l *localStorage) SetEndTime(id int64, endTime time.Time) error {
 func (l *localStorage) DeleteItem(id int64) error {
 	l.Lock()
 	defer l.Unlock()
-	log.Println("Удаление элемента из списка!")
+	log.Printf("Удаление элемента из списка ID=%d \n", id)
 
 	delete(l.items, id)
 

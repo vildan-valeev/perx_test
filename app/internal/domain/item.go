@@ -57,7 +57,6 @@ func (s Status) String() string {
 // ToDTO TODO перенесте в dto, сделать передачу аргументом а не методом.
 func (i Items) ToDTO() dto.ItemsDTO {
 	result := dto.ItemsDTO{}
-
 	for _, item := range i {
 		result = append(result, dto.ItemDTO{
 			ID:               item.ID,
@@ -72,7 +71,6 @@ func (i Items) ToDTO() dto.ItemsDTO {
 			ReceiptTime:      item.ReceiptTime.UnixMilli(),
 			StartTime:        item.StartTime.UnixMilli(),
 			EndTime:          item.EndTime.UnixMilli(),
-			Err:              item.err.Error(),
 		})
 	}
 
