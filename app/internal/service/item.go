@@ -27,7 +27,7 @@ func NewItemService(repo repository.Item, wp *pool.Pool) *ItemService {
 	}
 }
 
-// AddItemToQueueService Добавление задачи в очеред.
+// AddItemToQueueService Добавление задачи в очередь.
 func (s ItemService) AddItemToQueueService(ctx context.Context, addItem *dto.ItemToQueueDTO) error {
 	log.Println("Add to queue", addItem)
 
@@ -46,7 +46,7 @@ func (s ItemService) AddItemToQueueService(ctx context.Context, addItem *dto.Ite
 		ReceiptTime:   time.Now(), // выставляем время получения item в обработку
 	}
 
-	// todo: validation Item
+	// todo: validation business logic Item fields
 
 	// отправляем на обработку в очередь worker pool
 	task := pool.NewTask(s.progression, &ArgsProgression{Item: i})
@@ -68,7 +68,7 @@ func (s ItemService) ListItemService(ctx context.Context) (*domain.Items, error)
 
 // ArgsProgression Аргументы для проброса в таск и вызова функции progression из таски в воркер пуле.
 type ArgsProgression struct {
-	Item domain.Item // отдаем копию в обработку(по ссылке только в/из хранилища)
+	Item domain.Item // Отдаем копию в обработку(по ссылке только в/из хранилища)
 }
 
 func (s ItemService) progression(arguments interface{}) error {
@@ -121,7 +121,7 @@ func (s ItemService) ProcessingResults(ctx context.Context) {
 	ticker := time.NewTicker(1 * time.Minute)
 
 	doOnce.Do(func() {
-		log.Println("Запус воркера обработки хранилища")
+		log.Println("Запуск воркера обработки хранилища")
 		go func() {
 			for {
 				select {
@@ -157,7 +157,7 @@ func (s ItemService) cleaning(ctx context.Context) error {
 		}
 	}
 
-	log.Println("обработкa завершена...")
+	log.Println("Обработкa завершена...")
 
 	return nil
 }

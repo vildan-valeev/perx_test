@@ -8,14 +8,13 @@ import (
 	"github.com/vildan-valeev/perx_test/internal/domain"
 )
 
-// Item - методы для работы с БД.
+// LocalStorage - методы для работы с БД.
 type LocalStorage interface {
 	SetItem(item *domain.Item) error
-
 	UpdateCurrentIteration(id int64, currentIteration int) error
 	GetItem(id int64) (*domain.Item, error)
 	GetItems() (*domain.Items, error)
-	// Update Item
+	// Update Items
 	SetStatus(id int64, status domain.Status) error
 	SetStartTime(id int64, time time.Time) error
 	SetEndTime(id int64, time time.Time) error
@@ -45,6 +44,7 @@ func GetLocalStorage() LocalStorage {
 	return instance
 }
 
+// UpdateCurrentIteration Обновление текущей итерации!
 func (l *localStorage) UpdateCurrentIteration(id int64, currentIteration int) error {
 	l.Lock()
 	defer l.Unlock()

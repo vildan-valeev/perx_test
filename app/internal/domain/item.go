@@ -1,6 +1,7 @@
 package domain
 
 import (
+	"sort"
 	"time"
 
 	"github.com/vildan-valeev/perx_test/internal/transport/dto"
@@ -17,11 +18,11 @@ type Item struct {
 	TTL           float64 // время хранени результата в секуднах
 
 	// TODO возможно в отдельную структуру...
-	CurrentIteration int       // текущая итерация
-	ReceiptTime      time.Time // время поставки
-	StartTime        time.Time // время запуска
-	EndTime          time.Time // время окончания
-	err              error     // ошибка
+	CurrentIteration int       // Текущая итерация
+	ReceiptTime      time.Time // Время поставки
+	StartTime        time.Time // Время запуска
+	EndTime          time.Time // Время окончания
+	err              error     // Ошибка
 }
 
 type Items map[int64]*Item
@@ -42,9 +43,9 @@ func (s Status) String() string {
 	case 0:
 		return "Unknown"
 	case 1:
-		return "В процессе"
-	case 2:
 		return "В очереди"
+	case 2:
+		return "В процессе"
 	case 3:
 		return "Завершен"
 	case 4:
@@ -73,6 +74,8 @@ func (i Items) ToDTO() dto.ItemsDTO {
 			EndTime:          item.EndTime.UnixMilli(),
 		})
 	}
+	// сортируем слайс по окончанию времени выполнения (по возрастающей)
+	sort.Slice(result, func(i, j int) bool { return result[i].EndTime < result[j].EndTime })
 
 	return result
 }

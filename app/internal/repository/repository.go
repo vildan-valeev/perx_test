@@ -11,16 +11,9 @@ import (
 Работа с БД(памятью)
 */
 
-type Repositories struct {
-	Item Item
-}
+///go:generate echo $PWD - $GOPACKAGE - $GOFILE
 
-// NewRepositories создаем структуру репозиториев.
-func NewRepositories() *Repositories {
-	return &Repositories{
-		Item: NewItemRepository(),
-	}
-}
+//go:generate mockgen -source=repository.go -destination=../../test/mocks/repository/repository.go -package=mocks . Item
 
 // Item - методы для работы с БД.
 type Item interface {
@@ -33,4 +26,15 @@ type Item interface {
 	SetStartTime(id int64, time time.Time) error
 	SetEndTime(id int64, time time.Time) error
 	DeleteItem(id int64) error
+}
+
+type Repositories struct {
+	Item Item
+}
+
+// NewRepositories создаем структуру репозиториев.
+func NewRepositories() *Repositories {
+	return &Repositories{
+		Item: NewItemRepository(),
+	}
 }

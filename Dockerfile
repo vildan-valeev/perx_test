@@ -21,4 +21,4 @@ COPY --from=builder ./app/build/main main
 
 EXPOSE 8000
 
-ENTRYPOINT ["./main"]
+ENTRYPOINT ["./main", "-n=5"]

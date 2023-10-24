@@ -1,4 +1,3 @@
-
 .PHONY: help
 help:
 	@echo "-Комп перезагружал?\n-Да!\n-Клаву протирал?\n-Да!\n-Тогда не знаю в чем проблема..."
@@ -7,11 +6,10 @@ help:
 up:
 	docker compose up --build
 
-
 .PHONY: up_local
 up_local:
 	cd app && CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o ./build/main ./cmd/app/main.go
-	cd app && ./build/main
+	cd app && ./build/main -n=5
 
 .PHONY: lint
 lint:
@@ -24,3 +22,7 @@ test:
 .PHONY: test_race
 test_race:
 	cd app && go test -race -short ./...
+
+.PHONY: generate
+generate:
+	cd app && go generate ./...

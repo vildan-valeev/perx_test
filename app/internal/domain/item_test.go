@@ -8,7 +8,7 @@ import (
 	"github.com/vildan-valeev/perx_test/internal/transport/dto"
 )
 
-func TestStatusSting(t *testing.T) {
+func TestStatusString(t *testing.T) {
 	type args struct {
 		item domain.Status
 	}
