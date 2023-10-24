@@ -128,7 +128,6 @@ func (s ItemService) ProcessingResults(ctx context.Context) {
 				case <-ctx.Done():
 					return
 				case <-ticker.C:
-					log.Printf("Удаление старых данных...")
 					err := s.cleaning(ctx)
 					if err != nil {
 						log.Println(err.Error())
@@ -142,7 +141,7 @@ func (s ItemService) ProcessingResults(ctx context.Context) {
 }
 
 func (s ItemService) cleaning(ctx context.Context) error {
-	log.Println("обработкa...")
+	log.Printf("Удаление старых данных...")
 
 	items, err := s.repo.GetItems(ctx)
 	if err != nil {

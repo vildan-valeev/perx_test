@@ -1,7 +1,7 @@
 package pool
 
 import (
-	"fmt"
+	"log"
 )
 
 // Worker handles all the work.
@@ -22,7 +22,7 @@ func NewWorker(channel chan *Task, id int) *Worker {
 
 // Start starts the worker.
 func (wr *Worker) Start() {
-	fmt.Printf("Starting worker %d\n", wr.ID)
+	log.Printf("Starting worker %d\n", wr.ID)
 
 	for {
 		select {
@@ -36,7 +36,7 @@ func (wr *Worker) Start() {
 
 // Stop quits the worker.
 func (wr *Worker) Stop() {
-	fmt.Printf("Closing worker %d\n", wr.ID)
+	log.Printf("Closing worker %d\n", wr.ID)
 
 	go func() {
 		wr.quit <- true
