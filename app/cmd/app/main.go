@@ -87,6 +87,8 @@ func (m *Main) Run(ctx context.Context) (err error) {
 		Repos: repositories,
 		Wp:    m.wp,
 	})
+	// start processing results by ticker
+	go services.Item.ProcessingResults(ctx)
 
 	m.Srv = server.New(ctx, *m.Config, services)
 

@@ -20,16 +20,16 @@ func NewAPI(ctx context.Context, cfg config.Config, s service.Item) *Router {
 }
 
 var (
-	Http404Response = []byte("page not found")
-	Http405Response = []byte("method not allowed")
+	HTTP404Response = []byte("page not found")     //nolint:gochecknoglobals
+	HTTP405Response = []byte("method not allowed") //nolint:gochecknoglobals
 )
 
 func Set404(content string) {
-	Http404Response = []byte(content)
+	HTTP404Response = []byte(content)
 }
 
 func Set405(content string) {
-	Http404Response = []byte(content)
+	HTTP404Response = []byte(content)
 }
 
 // Router represents the router which handles routing.
@@ -45,6 +45,7 @@ type route struct {
 }
 
 var (
+	//nolint:gochecknoglobals
 	tmpRoute            = &route{}
 	ErrNotFound         = errors.New("no matching route was found") // Error for not found.
 	ErrMethodNotAllowed = errors.New("methods is not allowed")      // Error for method not allowed.
@@ -109,10 +110,10 @@ func handleErr(err error) (int, []byte) {
 	switch {
 	case errors.Is(err, ErrMethodNotAllowed):
 		status = http.StatusMethodNotAllowed
-		body = Http405Response
+		body = HTTP405Response
 	case errors.Is(err, ErrNotFound):
 		status = http.StatusNotFound
-		body = Http404Response
+		body = HTTP404Response
 	}
 
 	return status, body

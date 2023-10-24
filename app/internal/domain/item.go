@@ -31,8 +31,8 @@ type Status int
 
 const (
 	StatusUnknown   Status = iota // Зарезервированный код (не используемое значение, статус неизвестно)
-	StatusProcessed               // В процессе
 	StatusInQueue                 // В очереди
+	StatusProcessed               // В процессе
 	StatusDone                    // Завершен
 	StatusError                   // Ошибка
 )

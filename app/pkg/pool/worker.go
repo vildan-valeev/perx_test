@@ -34,7 +34,7 @@ func (wr *Worker) Start() {
 	}
 }
 
-// Stop quits the worker
+// Stop quits the worker.
 func (wr *Worker) Stop() {
 	fmt.Printf("Closing worker %d\n", wr.ID)
 

@@ -51,6 +51,7 @@ func (s ItemService) AddItemToQueueService(ctx context.Context, addItem *dto.Ite
 	// отправляем на обработку в очередь worker pool
 	task := pool.NewTask(s.progression, &ArgsProgression{Item: i})
 	s.wp.AddTask(task) // TODO: add errors
+
 	i.Status = domain.StatusInQueue
 	// сохраняем в память(оправляем в хранилище/бд)
 	if err = s.repo.SetItem(ctx, &i); err != nil {
@@ -68,11 +69,9 @@ func (s ItemService) ListItemService(ctx context.Context) (*domain.Items, error)
 // ArgsProgression Аргументы для проброса в таск и вызова функции progression из таски в воркер пуле.
 type ArgsProgression struct {
 	Item domain.Item // отдаем копию в обработку(по ссылке только в/из хранилища)
-	//Out  chan<- domain.Item
 }
 
 func (s ItemService) progression(arguments interface{}) error {
-
 	// TODO: сделать проверки интерфейса на наличие аргументов
 	args := arguments.(*ArgsProgression)
 	id := args.Item.ID
@@ -82,15 +81,17 @@ func (s ItemService) progression(arguments interface{}) error {
 	I := args.Item.TimeInterval
 
 	// TODO: РЕЗУЛЬТАТЫ ЧЕРЕЗ КАНАЛ ПРОТАСКИВАЕМ ИЛИ ТАК ДЕРГАЕМ МЕТОДЫ ?????
-	//outChan := args.Out
 
 	log.Printf("ID=%d, start=%f, delta=%f, n=%d I=%f\n", id, a1, d, n, I)
+
 	if err := s.repo.SetStatus(id, domain.StatusProcessed); err != nil {
 		return err
 	}
+
 	if err := s.repo.SetStartTime(id, time.Now()); err != nil {
 		return err
 	}
+
 	for i := 1; i < n+1; i++ {
 		res := a1 + (d * (float64(i) - 1))
 		log.Printf("ID=%d, curIter=%d, res=%f \n", id, i, res)
@@ -100,63 +101,64 @@ func (s ItemService) progression(arguments interface{}) error {
 		}
 		// интервал в секундах между итерациями
 		time.Sleep(time.Duration(I) * time.Second)
-
 	}
+
 	if err := s.repo.SetStatus(id, domain.StatusDone); err != nil {
 		return err
 	}
+
 	if err := s.repo.SetEndTime(id, time.Now()); err != nil {
 		return err
 	}
+
 	return nil
 }
 
+//nolint:gochecknoglobals
 var doOnce sync.Once
 
 func (s ItemService) ProcessingResults(ctx context.Context) {
 	ticker := time.NewTicker(1 * time.Minute)
-	done := make(chan bool)
 
 	doOnce.Do(func() {
 		log.Println("Запус воркера обработки хранилища")
 		go func() {
 			for {
 				select {
-				case <-done:
+				case <-ctx.Done():
 					return
 				case <-ticker.C:
 					log.Printf("Удаление старых данных...")
 					err := s.cleaning(ctx)
 					if err != nil {
-						log.Printf(err.Error())
+						log.Println(err.Error())
 					}
 				}
 			}
-
 		}()
-
 	})
+
 	log.Println("Обработка результатов уже запущена")
 }
 
 func (s ItemService) cleaning(ctx context.Context) error {
 	log.Println("обработкa...")
+
 	items, err := s.repo.GetItems(ctx)
 	if err != nil {
 		return err
 	}
 
 	for k, v := range *items {
-
 		if v.EndTime.After(time.Now().Add(-time.Duration(v.TTL) * time.Second)) {
 			err = s.repo.DeleteItem(k)
 			if err != nil {
 				return err
 			}
 		}
-
 	}
 
 	log.Println("обработкa завершена...")
+
 	return nil
 }
