@@ -40,6 +40,7 @@
 Приветствуется использование только стандартной библиотеки.
 
 ---
+
 ## Prerequisites
 
 Golang  
@@ -47,7 +48,9 @@ Docker
 Golangci-lint (optional)  
 Make  
 brains and hands
+
 ---
+
 ## Start
 Instruction
 ```shell
@@ -76,6 +79,7 @@ Data race detector:
 make test_race
 ```
 ---
+
 ## Architecture
 
 Слой transport - принимаем данные, запросы, проверка входящих значение, укладка в DTO, формирование ответов.   
